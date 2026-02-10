@@ -574,6 +574,32 @@ body {
 .layer-7 .upgrade-indicator { color: #9C27B0; }    /* Purple temples */
 .layer-8 .upgrade-indicator { color: #3F51B5; }    /* Blue wizards */
 
+/* Toggle Number Format Button */
+.btn-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffd700;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.btn-toggle.flat {
+    color: #7fff00;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .main-game {
@@ -632,4 +658,27 @@ body {
     .upgrades-panel {
         max-height: 300px; /* Slightly smaller on mobile */
     }
+}
+.btn-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffd700;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.btn-toggle.flat {
+    color: #7fff00;
 }

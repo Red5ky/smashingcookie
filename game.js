@@ -3,6 +3,7 @@ console.log('🎮 Game starting with embedded sounds...');
 // ===== WEB AUDIO SETUP =====
 let audioContext = null;
 let soundEnabled = true;
+let useFlatNumbers = true; // Default to flat numbers
 
 function initAudio() {
     if (audioContext) return;
@@ -321,32 +322,46 @@ function rebuildFullUI() {
     }
 }
 
+// ===== NUMBER FORMATTING WITH TOGGLE =====
 function formatNum(num) {
-    // Handle very small numbers (less than 0.1)
-    if (num < 0.1 && num > 0) {
-        return num.toFixed(2);
+    if (useFlatNumbers) {
+        // Flat numbers with commas (e.g., 1,500,000)
+        return Math.floor(num).toLocaleString('en-US');
+    } else {
+        // Abbreviated numbers (e.g., 1.5M)
+        if (num >= 1e12) return (num / 1e12).toFixed(1) + 'T';
+        if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+        if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+        if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+        return Math.floor(num).toString();
+    }
+}
+
+// ===== TOGGLE NUMBER FORMAT =====
+function toggleNumberFormat() {
+    useFlatNumbers = !useFlatNumbers;
+    const btn = document.getElementById('number-toggle');
+    
+    if (useFlatNumbers) {
+        btn.innerHTML = '<i class="fas fa-list"></i>';
+        btn.classList.add('flat');
+        showNotification('🔢 Flat numbers enabled');
+    } else {
+        btn.innerHTML = '<i class="fas fa-compress-alt"></i>';
+        btn.classList.remove('flat');
+        showNotification('🔢 Abbreviated numbers enabled');
     }
     
-    // Handle fractional numbers (0.1 to 1000)
-    if (num < 1000) {
-        // Round to 1 decimal place, but remove trailing .0
-        const rounded = Math.round(num * 10) / 10;
-        return rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(1);
-    }
-    
-    // Handle thousands+
-    if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
-    if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
-    if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
-    
-    return Math.floor(num).toString();
+    updateCookieCounter();
+    saveGame();
 }
 
 // ===== SAVE/LOAD =====
 function saveGame() {
     try {
         localStorage.setItem('idleGameSave', JSON.stringify({
-            cookies, cookiesRaw, cookiesPerSecond, prestigeMultiplier, upgrades, soundEnabled, timestamp: Date.now()
+            cookies, cookiesRaw, cookiesPerSecond, prestigeMultiplier, 
+            upgrades, soundEnabled, useFlatNumbers, timestamp: Date.now()
         }));
         showStatus('✅ Saved');
     } catch(e) {}
@@ -362,7 +377,9 @@ function loadGame() {
             cookiesPerSecond = s.cookiesPerSecond || 0;
             prestigeMultiplier = s.prestigeMultiplier || 1;
             soundEnabled = s.soundEnabled !== false; // Default true
+            useFlatNumbers = s.useFlatNumbers !== false; // Default true
             updateSoundButton();
+            updateNumberToggleButton();
             
             if (s.upgrades) {
                 for (const t in s.upgrades) {
@@ -417,6 +434,19 @@ function updateSoundButton() {
     } else {
         btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
         btn.classList.add('muted');
+    }
+}
+
+function updateNumberToggleButton() {
+    const btn = document.getElementById('number-toggle');
+    if (!btn) return;
+    
+    if (useFlatNumbers) {
+        btn.innerHTML = '<i class="fas fa-list"></i>';
+        btn.classList.add('flat');
+    } else {
+        btn.innerHTML = '<i class="fas fa-compress-alt"></i>';
+        btn.classList.remove('flat');
     }
 }
 
@@ -481,6 +511,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Sound toggle
     document.getElementById('sound-btn')?.addEventListener('click', toggleSound);
+    
+    // Number format toggle
+    document.getElementById('number-toggle')?.addEventListener('click', toggleNumberFormat);
     
     const upgradesList = document.getElementById('upgrades-list');
     if (upgradesList) {
