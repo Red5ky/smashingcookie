@@ -31,34 +31,35 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 15px;
+    padding: 10px 12px;
     background: rgba(255, 255, 255, 0.15);
     border-radius: 15px;
     margin-bottom: 15px;
-    flex-wrap: wrap;
-    gap: 10px;
-    min-height: 60px;
+    flex-wrap: nowrap; /* CRITICAL: Prevent wrapping */
+    gap: 8px;
+    min-height: 52px;
 }
 
 .stats {
     display: flex;
-    gap: 20px;
+    gap: 15px;
+    white-space: nowrap;
 }
 
 .stat-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 1.2em;
+    gap: 6px;
+    font-size: 1.15em;
     font-weight: bold;
 }
 
 .stat-item i {
-    font-size: 1.6em;
+    font-size: 1.5em;
 }
 
 #cookie-count {
-    font-size: 1.7em;
+    font-size: 1.6em;
     font-weight: bold;
     color: #ffd700;
 }
@@ -66,9 +67,10 @@ body {
 /* Header Buttons Container */
 .header-buttons {
     display: flex;
-    gap: 10px;
+    gap: 6px;
     align-items: center;
-    flex-wrap: wrap;
+    flex-shrink: 0; /* Prevent shrinking */
+    white-space: nowrap;
 }
 
 /* Prestige Button */
@@ -76,19 +78,23 @@ body {
     background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
     color: #333;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 14px;
     border-radius: 50px;
-    font-size: 1em;
+    font-size: 0.92em;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-    min-width: 140px;
+    box-shadow: 0 3px 12px rgba(255, 215, 0, 0.4);
+    min-width: 125px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
 }
 
 .btn-prestige:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.6);
 }
 
 .btn-prestige:disabled {
@@ -102,16 +108,17 @@ body {
     background: rgba(255, 255, 255, 0.2);
     color: #ffd700;
     border: none;
-    width: 45px;
-    height: 45px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    font-size: 1.3em;
+    font-size: 1.15em;
     cursor: pointer;
     transition: all 0.3s;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
 }
 
 .btn-sound:hover {
@@ -129,16 +136,17 @@ body {
     background: rgba(255, 255, 255, 0.2);
     color: #ffd700;
     border: none;
-    width: 45px;
-    height: 45px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    font-size: 1.1em;
+    font-size: 0.95em;
     cursor: pointer;
     transition: all 0.3s;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
 }
 
 .btn-toggle:hover {
@@ -158,13 +166,13 @@ body {
     margin-bottom: 15px;
 }
 
-/* Cookie Area - COMPACT */
+/* Cookie Area */
 .cookie-area {
     flex: 1;
     min-width: 260px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    padding: 30px 20px;
+    padding: 28px 18px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -172,7 +180,7 @@ body {
     transition: all 0.2s;
     position: relative;
     overflow: hidden;
-    height: 350px;
+    height: 340px;
 }
 
 .cookie-area:hover {
@@ -205,7 +213,7 @@ body {
     transform: scale(0.9);
 }
 
-/* ROTATION CONTAINERS - Each layer rotates independently */
+/* ROTATION CONTAINERS */
 .rotation-layer {
     position: absolute;
     width: 100%;
@@ -216,45 +224,14 @@ body {
     transform-origin: center;
 }
 
-/* LAYER 1: Cursor (Fingers) - Rotates clockwise */
-.layer-1 {
-    animation: rotate-clockwise 20s linear infinite;
-}
-
-/* LAYER 2: Grandma - Rotates counter-clockwise */
-.layer-2 {
-    animation: rotate-counter 25s linear infinite;
-}
-
-/* LAYER 3: Farm - Rotates clockwise */
-.layer-3 {
-    animation: rotate-clockwise 30s linear infinite;
-}
-
-/* LAYER 4: Mine - Rotates counter-clockwise */
-.layer-4 {
-    animation: rotate-counter 35s linear infinite;
-}
-
-/* LAYER 5: Factory - Rotates clockwise */
-.layer-5 {
-    animation: rotate-clockwise 40s linear infinite;
-}
-
-/* LAYER 6: Bank - Rotates counter-clockwise */
-.layer-6 {
-    animation: rotate-counter 45s linear infinite;
-}
-
-/* LAYER 7: Temple - Rotates clockwise */
-.layer-7 {
-    animation: rotate-clockwise 50s linear infinite;
-}
-
-/* LAYER 8: Wizard - Rotates counter-clockwise */
-.layer-8 {
-    animation: rotate-counter 55s linear infinite;
-}
+.layer-1 { animation: rotate-clockwise 20s linear infinite; }
+.layer-2 { animation: rotate-counter 25s linear infinite; }
+.layer-3 { animation: rotate-clockwise 30s linear infinite; }
+.layer-4 { animation: rotate-counter 35s linear infinite; }
+.layer-5 { animation: rotate-clockwise 40s linear infinite; }
+.layer-6 { animation: rotate-counter 45s linear infinite; }
+.layer-7 { animation: rotate-clockwise 50s linear infinite; }
+.layer-8 { animation: rotate-counter 55s linear infinite; }
 
 @keyframes rotate-clockwise {
     0% { transform: rotate(0deg); }
@@ -276,31 +253,20 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Position indicators on different radii based on layer */
-.layer-1 .upgrade-indicator { font-size: 1.6rem; }
-.layer-2 .upgrade-indicator { font-size: 1.7rem; }
-.layer-3 .upgrade-indicator { font-size: 1.8rem; }
-.layer-4 .upgrade-indicator { font-size: 1.9rem; }
-.layer-5 .upgrade-indicator { font-size: 2rem; }
-.layer-6 .upgrade-indicator { font-size: 2.1rem; }
-.layer-7 .upgrade-indicator { font-size: 2.2rem; }
-.layer-8 .upgrade-indicator { font-size: 2.3rem; }
+/* Colors for each layer */
+.layer-1 .upgrade-indicator { color: #4CAF50; font-size: 1.6rem; }
+.layer-2 .upgrade-indicator { color: #FF5722; font-size: 1.7rem; }
+.layer-3 .upgrade-indicator { color: #8BC34A; font-size: 1.8rem; }
+.layer-4 .upgrade-indicator { color: #9E9E9E; font-size: 1.9rem; }
+.layer-5 .upgrade-indicator { color: #3F51B5; font-size: 2rem; }
+.layer-6 .upgrade-indicator { color: #FF9800; font-size: 2.1rem; }
+.layer-7 .upgrade-indicator { color: #9C27B0; font-size: 2.2rem; }
+.layer-8 .upgrade-indicator { color: #3F51B5; font-size: 2.3rem; }
 
-/* Hover effect on cookie area shows all indicators */
 .cookie-area:hover .upgrade-indicator {
     transform: scale(1.2);
     text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
 }
-
-/* Colors for each layer */
-.layer-1 .upgrade-indicator { color: #4CAF50; }    /* Green fingers */
-.layer-2 .upgrade-indicator { color: #FF5722; }    /* Orange grandmas */
-.layer-3 .upgrade-indicator { color: #8BC34A; }    /* Light green farms */
-.layer-4 .upgrade-indicator { color: #9E9E9E; }    /* Grey mines */
-.layer-5 .upgrade-indicator { color: #3F51B5; }    /* Blue factories */
-.layer-6 .upgrade-indicator { color: #FF9800; }    /* Orange banks */
-.layer-7 .upgrade-indicator { color: #9C27B0; }    /* Purple temples */
-.layer-8 .upgrade-indicator { color: #3F51B5; }    /* Blue wizards */
 
 /* Floating Cookies Animation */
 .floating-cookies {
@@ -321,31 +287,25 @@ body {
 }
 
 @keyframes float-up {
-    0% {
-        transform: translateY(0) scale(0.5);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(-100px) scale(1);
-        opacity: 0;
-    }
+    0% { transform: translateY(0) scale(0.5); opacity: 1; }
+    100% { transform: translateY(-100px) scale(1); opacity: 0; }
 }
 
-/* Upgrades Panel - COMPACT */
+/* Upgrades Panel */
 .upgrades-panel {
     flex: 1;
     min-width: 260px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    padding: 20px 15px;
-    max-height: 350px;
+    padding: 18px 14px;
+    max-height: 340px;
     overflow-y: auto;
 }
 
 .upgrades-panel h2 {
-    margin-bottom: 15px;
+    margin-bottom: 14px;
     text-align: center;
-    font-size: 1.6em;
+    font-size: 1.55em;
     color: #ffd700;
     font-weight: bold;
 }
@@ -354,8 +314,8 @@ body {
 .upgrade-item {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 12px;
+    padding: 11px;
+    margin-bottom: 11px;
     cursor: pointer;
     transition: all 0.3s;
     border: 2px solid transparent;
@@ -364,36 +324,36 @@ body {
 
 .upgrade-item:hover {
     background: rgba(255, 255, 255, 0.2);
-    transform: translateX(5px);
+    transform: translateX(4px);
 }
 
 .upgrade-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
 .upgrade-name {
-    font-size: 1.1em;
+    font-size: 1.05em;
     color: #ffd700;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
 }
 
 .upgrade-level {
     background: rgba(255, 215, 0, 0.3);
-    padding: 2px 8px;
+    padding: 2px 7px;
     border-radius: 15px;
-    font-size: 0.85em;
+    font-size: 0.83em;
     font-weight: bold;
 }
 
 .upgrade-desc {
-    font-size: 0.9em;
-    margin-bottom: 6px;
+    font-size: 0.88em;
+    margin-bottom: 5px;
     color: #ddd;
     line-height: 1.3;
 }
@@ -401,15 +361,15 @@ body {
 .upgrade-stats {
     display: flex;
     justify-content: space-between;
-    font-size: 0.85em;
-    margin-top: 4px;
+    font-size: 0.83em;
+    margin-top: 3px;
 }
 
 .upgrade-cps {
     color: #7fff00;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
 }
 
 .upgrade-cost {
@@ -417,7 +377,7 @@ body {
     font-weight: bold;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
 }
 
 /* GREEN HIGHLIGHT WHEN AFFORDABLE */
@@ -448,27 +408,27 @@ body {
     background: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Footer - COMPACT */
+/* Footer */
 .footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    padding: 15px;
+    gap: 14px;
+    padding: 14px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     flex-wrap: wrap;
 }
 
 .btn {
-    padding: 10px 22px;
+    padding: 9px 20px;
     border: none;
     border-radius: 50px;
-    font-size: 0.95em;
+    font-size: 0.92em;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s;
-    min-width: 120px;
+    min-width: 115px;
 }
 
 .btn-save {
@@ -494,10 +454,10 @@ body {
 }
 
 #save-status {
-    margin: 0 10px;
-    font-size: 0.9em;
+    margin: 0 8px;
+    font-size: 0.88em;
     color: #7fff00;
-    min-width: 130px;
+    min-width: 120px;
     text-align: center;
     font-weight: bold;
 }
@@ -521,166 +481,200 @@ body {
     background: rgba(255, 215, 0, 0.8);
 }
 
-/* ===== COMPACT MOBILE LAYOUT ===== */
+/* ===== ULTRA-COMPACT MOBILE LAYOUT ===== */
 @media (max-width: 768px) {
-    /* Header buttons - smaller and compact */
-    .header-buttons {
+    /* CRITICAL: Prevent header wrapping */
+    .header {
+        flex-wrap: nowrap;
+        padding: 8px 10px;
+        min-height: 48px;
+    }
+    
+    .stats {
+        gap: 12px;
+    }
+    
+    .stat-item {
+        font-size: 1em;
         gap: 5px;
     }
     
-    .btn-sound, .btn-toggle, .btn-prestige {
-        width: 38px;
-        height: 38px;
-        padding: 0;
-        min-width: auto;
-    }
-    
-    .btn-sound i, .btn-toggle i {
-        font-size: 0.9em;
-    }
-    
-    .btn-prestige {
-        padding: 8px 12px;
-        font-size: 0.85em;
-        min-width: 110px;
-        width: auto;
-    }
-    
-    /* Stats - smaller text */
-    .stat-item {
-        gap: 6px;
-        font-size: 1em;
-    }
-    
     .stat-item i {
-        font-size: 1.3em;
+        font-size: 1.35em;
     }
     
     #cookie-count {
         font-size: 1.4em;
     }
     
-    /* Cookie area - more compact */
+    /* Ultra-compact header buttons */
+    .header-buttons {
+        gap: 5px;
+    }
+    
+    .btn-sound, .btn-toggle {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9em;
+    }
+    
+    .btn-prestige {
+        min-width: 105px;
+        padding: 6px 10px;
+        font-size: 0.82em;
+        gap: 3px;
+    }
+    
+    /* Cookie area */
     .cookie-area {
-        height: 240px;
-        padding: 20px 10px;
+        height: 230px;
+        padding: 18px 12px;
+    }
+    
+    .cookie-container {
+        width: 170px;
+        height: 170px;
+    }
+    
+    .cookie i {
+        font-size: 4.5rem;
+    }
+    
+    /* Fix rotation alignment for smaller container */
+    .rotation-layer {
+        width: 170px !important;
+        height: 170px !important;
+    }
+    
+    /* Scale rotation radii proportionally */
+    .upgrade-indicator {
+        transform: scale(0.92) !important;
+    }
+    
+    /* Upgrades panel */
+    .upgrades-panel {
+        max-height: 270px;
+        padding: 14px;
+    }
+    
+    .upgrades-panel h2 {
+        font-size: 1.35em;
+        margin-bottom: 10px;
+    }
+    
+    .upgrade-item {
+        padding: 9px;
+        margin-bottom: 9px;
+        border-radius: 10px;
+    }
+    
+    .upgrade-name { font-size: 0.98em; }
+    .upgrade-level { font-size: 0.8em; padding: 2px 6px; }
+    .upgrade-desc { font-size: 0.83em; margin-bottom: 4px; }
+    .upgrade-stats { font-size: 0.8em; }
+    
+    /* Footer */
+    .footer {
+        gap: 10px;
+        padding: 12px;
+    }
+    
+    .btn {
+        min-width: 85px;
+        padding: 8px 14px;
+        font-size: 0.85em;
+    }
+    
+    #save-status {
+        min-width: 95px;
+        font-size: 0.83em;
+    }
+}
+
+/* Extra small screens (iPhone SE, etc.) */
+@media (max-width: 420px) {
+    /* Even smaller header buttons */
+    .btn-sound, .btn-toggle {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8em;
+    }
+    
+    .btn-prestige {
+        min-width: 92px;
+        padding: 5px 8px;
+        font-size: 0.78em;
+        white-space: nowrap;
+    }
+    
+    /* Stats */
+    .stat-item {
+        font-size: 0.95em;
+    }
+    
+    #cookie-count {
+        font-size: 1.3em;
+    }
+    
+    /* Cookie area */
+    .cookie-area {
+        height: 200px;
+        padding: 15px 10px;
+    }
+    
+    .cookie-container {
+        width: 150px;
+        height: 150px;
     }
     
     .cookie i {
         font-size: 4rem;
     }
     
-    /* Upgrades panel - smaller items */
+    /* Fix rotation for smallest screens */
+    .rotation-layer {
+        width: 150px !important;
+        height: 150px !important;
+    }
+    
+    .upgrade-indicator {
+        transform: scale(0.85) !important;
+    }
+    
+    /* Upgrades panel */
     .upgrades-panel {
-        max-height: 280px;
-        padding: 15px;
+        max-height: 240px;
+        padding: 12px;
     }
     
     .upgrades-panel h2 {
-        font-size: 1.4em;
-        margin-bottom: 12px;
+        font-size: 1.25em;
     }
     
     .upgrade-item {
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 10px;
+        padding: 8px;
+        margin-bottom: 8px;
     }
     
-    .upgrade-name {
-        font-size: 1em;
-    }
-    
-    .upgrade-level {
-        font-size: 0.8em;
-        padding: 2px 7px;
-    }
-    
-    .upgrade-desc {
-        font-size: 0.85em;
-        margin-bottom: 5px;
-    }
-    
-    .upgrade-stats {
-        font-size: 0.8em;
-    }
-    
-    /* Footer - compact */
+    /* Footer */
     .footer {
+        flex-direction: column;
         gap: 8px;
         padding: 10px;
     }
     
     .btn {
-        min-width: 90px;
-        padding: 8px 12px;
-        font-size: 0.85em;
+        width: 100%;
+        max-width: 200px;
+        min-width: auto;
+        padding: 10px;
+        font-size: 0.9em;
     }
     
     #save-status {
-        min-width: 100px;
-        font-size: 0.85em;
-    }
-    
-    /* Cookie container - smaller */
-    .cookie-container {
-        width: 160px;
-        height: 160px;
-    }
-    
-    /* Rotation layers - scale down */
-    .upgrade-indicator {
-        font-size: 1.3rem !important;
-    }
-    
-    .layer-1 .upgrade-indicator { font-size: 1.2rem !important; }
-    .layer-2 .upgrade-indicator { font-size: 1.3rem !important; }
-    .layer-3 .upgrade-indicator { font-size: 1.4rem !important; }
-    .layer-4 .upgrade-indicator { font-size: 1.5rem !important; }
-    .layer-5 .upgrade-indicator { font-size: 1.6rem !important; }
-    .layer-6 .upgrade-indicator { font-size: 1.7rem !important; }
-    .layer-7 .upgrade-indicator { font-size: 1.8rem !important; }
-    .layer-8 .upgrade-indicator { font-size: 1.9rem !important; }
-}
-
-/* Extra small screens (iPhone SE, etc.) */
-@media (max-width: 420px) {
-    .btn-prestige {
-        min-width: 95px;
-        padding: 7px 10px;
-        font-size: 0.8em;
-    }
-    
-    .cookie-area {
-        height: 200px;
-    }
-    
-    .cookie i {
-        font-size: 3.5rem;
-    }
-    
-    .cookie-container {
-        width: 140px;
-        height: 140px;
-    }
-    
-    .upgrades-panel {
-        max-height: 250px;
-    }
-    
-    .upgrade-item {
-        padding: 8px;
-    }
-    
-    .header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-    
-    .header-buttons {
         width: 100%;
-        justify-content: center;
+        min-width: auto;
+        padding: 5px 0;
     }
 }
 
