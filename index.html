@@ -3,9 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cookie Clicker - Idle Game</title>
+    <title>Smashing Cookie - Idle Game</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* MINIMAL INLINE STYLES FOR COOKIE PREVIEW (remove after testing) */
+        .cookie-preview {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background: #f5f0e1;
+            border-radius: 15px;
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="game-container">
@@ -40,10 +51,86 @@
             <div class="cookie-area" id="cookie-clicker">
                 <div class="cookie-container">
                     <div class="cookie">
-                        <i class="fas fa-cookie fa-6x"></i>
+                        <!-- BEAUTIFUL REALISTIC COOKIE SVG -->
+                        <svg class="custom-cookie" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <!-- Rich baked gradient -->
+                                <radialGradient id="cookieGrad" cx="35%" cy="35%" r="75%">
+                                    <stop offset="0%" stop-color="#E6C9A8" />
+                                    <stop offset="40%" stop-color="#D4A76A" />
+                                    <stop offset="75%" stop-color="#B8864E" />
+                                    <stop offset="100%" stop-color="#8B5E3C" />
+                                </radialGradient>
+                                <!-- Chocolate chip gradient -->
+                                <radialGradient id="chipGrad" cx="30%" cy="30%" r="80%">
+                                    <stop offset="0%" stop-color="#6D4C41" />
+                                    <stop offset="100%" stop-color="#3E2723" />
+                                </radialGradient>
+                                <!-- Golden glow -->
+                                <filter id="cookieGlow" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur stdDeviation="4" result="blur"/>
+                                    <feFlood flood-color="#FFD700" flood-opacity="0.4" result="glow"/>
+                                    <feComposite in="glow" in2="blur" operator="in" result="softGlow"/>
+                                    <feBlend in="SourceGraphic" in2="softGlow" mode="screen"/>
+                                </filter>
+                            </defs>
+                            
+                            <!-- CRUMBLES around edge (makes it look hand-made) -->
+                            <circle cx="35" cy="105" r="3" fill="#B8864E" opacity="0.8" />
+                            <circle cx="42" cy="135" r="2.5" fill="#B8864E" opacity="0.7" />
+                            <circle cx="165" cy="85" r="3.5" fill="#B8864E" opacity="0.8" />
+                            <circle cx="155" cy="145" r="2" fill="#B8864E" opacity="0.7" />
+                            <circle cx="95" cy="185" r="3" fill="#B8864E" opacity="0.8" />
+                            
+                            <!-- COOKIE BODY (irregular edge for homemade look) -->
+                            <path d="M 100 20 
+                                     C 135 25, 165 45, 180 75 
+                                     C 192 105, 188 138, 170 162 
+                                     C 152 185, 122 195, 90 192 
+                                     C 58 190, 30 175, 20 145 
+                                     C 8 115, 12 80, 30 55 
+                                     C 45 30, 70 18, 100 20 Z" 
+                                  fill="url(#cookieGrad)" filter="url(#cookieGlow)" />
+                            
+                            <!-- TEXTURE CRACKS (organic baked cracks) -->
+                            <path d="M 60 70 C 75 65, 85 75, 100 80 C 115 85, 125 80, 140 85" 
+                                  stroke="#8B5E3C" stroke-width="2.5" fill="none" opacity="0.6" stroke-linecap="round" />
+                            <path d="M 70 110 C 85 118, 95 115, 110 118 C 125 121, 135 118, 145 110" 
+                                  stroke="#8B5E3C" stroke-width="2" fill="none" opacity="0.5" stroke-linecap="round" />
+                            <path d="M 85 50 C 92 58, 100 60, 108 58 C 116 56, 122 50, 125 45" 
+                                  stroke="#8B5E3C" stroke-width="1.8" fill="none" opacity="0.5" stroke-linecap="round" />
+                            <path d="M 55 130 C 65 135, 75 138, 85 135 C 95 132, 100 125, 105 120" 
+                                  stroke="#8B5E3C" stroke-width="2" fill="none" opacity="0.4" stroke-linecap="round" />
+                            
+                            <!-- CHOCOLATE CHIPS (irregular shapes - NOT perfect circles) -->
+                            <ellipse cx="60" cy="75" rx="9" ry="7" fill="url(#chipGrad)" transform="rotate(-15 60 75)" />
+                            <ellipse cx="95" cy="55" rx="8" ry="10" fill="url(#chipGrad)" transform="rotate(10 95 55)" />
+                            <ellipse cx="135" cy="75" rx="10" ry="8" fill="url(#chipGrad)" transform="rotate(-25 135 75)" />
+                            <ellipse cx="150" cy="110" rx="9" ry="9" fill="url(#chipGrad)" transform="rotate(5 150 110)" />
+                            <ellipse cx="130" cy="145" rx="8" ry="11" fill="url(#chipGrad)" transform="rotate(-10 130 145)" />
+                            <ellipse cx="95" cy="160" rx="11" ry="8" fill="url(#chipGrad)" transform="rotate(15 95 160)" />
+                            <ellipse cx="60" cy="140" rx="7" ry="9" fill="url(#chipGrad)" transform="rotate(-20 60 140)" />
+                            <ellipse cx="45" cy="105" rx="10" ry="7" fill="url(#chipGrad)" transform="rotate(8 45 105)" />
+                            <ellipse cx="110" cy="100" rx="9" ry="8" fill="url(#chipGrad)" transform="rotate(-5 110 100)" />
+                            
+                            <!-- MELTED CHIP DETAILS (tiny white highlights) -->
+                            <ellipse cx="63" cy="73" rx="3" ry="2" fill="white" opacity="0.4" transform="rotate(-15 63 73)" />
+                            <ellipse cx="138" cy="72" rx="3" ry="2" fill="white" opacity="0.3" transform="rotate(-25 138 72)" />
+                            <ellipse cx="98" cy="157" rx="3" ry="2" fill="white" opacity="0.4" transform="rotate(15 98 157)" />
+                            
+                            <!-- SHINE HIGHLIGHT (makes it look fresh/glossy) -->
+                            <ellipse cx="85" cy="75" rx="28" ry="18" fill="white" opacity="0.25" transform="rotate(-25 85 75)" />
+                            <ellipse cx="90" cy="80" rx="12" ry="8" fill="white" opacity="0.35" transform="rotate(-25 90 80)" />
+                        </svg>
                     </div>
                     <div class="floating-cookies" id="floating-cookies"></div>
                 </div>
+            </div>
+
+            <!-- AD SLOT - NATIVE BANNER -->
+            <div class="ad-slot">
+                <script async="async" data-cfasync="false" src="https://pl28686530.effectivegatecpm.com/49e8f7d787ee9f43ebf2867f83ece867/invoke.js"></script>
+                <div id="container-49e8f7d787ee9f43ebf2867f83ece867"></div>
             </div>
 
             <!-- Upgrades Panel -->
@@ -62,6 +149,13 @@
                 <i class="fas fa-download"></i> Load Game
             </button>
             <span id="save-status"></span>
+            
+            <!-- Legal links -->
+            <div class="legal-links">
+                <a href="privacy-policy.html" target="_blank">Privacy Policy</a> |
+                <a href="terms.html" target="_blank">Terms</a> |
+                <a href="contact.html" target="_blank">Contact</a>
+            </div>
         </div>
     </div>
 

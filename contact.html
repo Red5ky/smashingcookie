@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Smashing Cookie</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #ffd700;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+        .contact-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .contact-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .contact-item i {
+            font-size: 1.5em;
+            color: #ffd700;
+            min-width: 30px;
+        }
+        .contact-item span {
+            font-size: 1.1em;
+        }
+        .contact-item a {
+            color: #7fff00;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+        .note {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid #ffd700;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 20px;
+            font-size: 0.95em;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9em;
+            color: #ccc;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-envelope"></i> Contact Us</h1>
+        
+        <div class="contact-info">
+            <h2>Get in Touch</h2>
+            <p>We'd love to hear from you! Whether you have feedback, bug reports, or questions, please reach out using the information below.</p>
+            
+            <div class="contact-item">
+                <i class="fas fa-bug"></i>
+                <span><strong>Bug Reports:</strong> Report game issues or glitches</span>
+            </div>
+            
+            <div class="contact-item">
+                <i class="fas fa-lightbulb"></i>
+                <span><strong>Feature Requests:</strong> Suggest new upgrades or features</span>
+            </div>
+            
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span><strong>Email:</strong> <a href="mailto:support@your-game-domain.com">support@your-game-domain.com</a></span>
+            </div>
+            
+            <div class="contact-item">
+                <i class="fas fa-globe"></i>
+                <span><strong>Website:</strong> <a href="https://smashing-cookies.netlify.app/" target="_blank">https://smashing-cookies.netlify.app/</a></span>
+            </div>
+            
+            <div class="note">
+                <p><strong>⚠️ Important:</strong> We do not collect personal information beyond what's necessary to respond to your inquiry. Please do not send sensitive personal data via email.</p>
+            </div>
+        </div>
+
+        <div class="contact-info">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="contact-item">
+                <i class="fas fa-question-circle"></i>
+                <span><strong>How do I save my progress?</strong> Click the "Save Game" button in the footer. Your progress is also auto-saved every minute.</span>
+            </div>
+            
+            <div class="contact-item">
+                <i class="fas fa-question-circle"></i>
+                <span><strong>My progress disappeared!</strong> Clearing browser cache/cookies will delete your save. Always use "Save Game" and "Load Game" buttons.</span>
+            </div>
+            
+            <div class="contact-item">
+                <i class="fas fa-question-circle"></i>
+                <span><strong>How does Prestige work?</strong> Click the Prestige button after earning 1,000,000 cookies to reset your game with a permanent multiplier boost.</span>
+            </div>
+            
+            <div class="contact-item">
+                <i class="fas fa-question-circle"></i>
+                <span><strong>Can I remove ads?</strong> Currently, ads support free hosting. Consider whitelisting our domain in your adblock if you enjoy the game!</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Cookie Clicker Idle Game. All rights reserved.</p>
+            <p><a href="privacy-policy.html" style="color: #7fff00;">Privacy Policy</a> | <a href="terms.html" style="color: #7fff00;">Terms of Service</a></p>
+        </div>
+    </div>
+</body>
+</html>
