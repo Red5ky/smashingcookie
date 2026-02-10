@@ -1,0 +1,331 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.game-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    max-width: 1000px;
+    width: 95%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.stats {
+    display: flex;
+    gap: 30px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.stat-item i {
+    font-size: 1.8em;
+}
+
+#cookie-count {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #ffd700;
+}
+
+/* Prestige Button */
+.btn-prestige {
+    background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+    color: #333;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.btn-prestige:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+}
+
+.btn-prestige:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Main Game Area */
+.main-game {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+/* Cookie Area */
+.cookie-area {
+    flex: 1;
+    min-width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.cookie-area:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
+}
+
+.cookie {
+    position: relative;
+}
+
+.cookie i {
+    color: #ffd700;
+    transition: all 0.1s;
+    animation: pulse 2s infinite;
+}
+
+.cookie-area:active .cookie i {
+    transform: scale(0.9);
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Floating Cookies Animation */
+.floating-cookies {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.floating-cookie {
+    position: absolute;
+    color: #ffd700;
+    font-size: 1.5em;
+    animation: float-up 1.5s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes float-up {
+    0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) scale(1);
+        opacity: 0;
+    }
+}
+
+/* Upgrades Panel */
+.upgrades-panel {
+    flex: 1;
+    min-width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.upgrades-panel h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.8em;
+    color: #ffd700;
+}
+
+/* Upgrade Items */
+.upgrade-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.upgrade-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+}
+
+.upgrade-item:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.upgrade-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.upgrade-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ffd700;
+}
+
+.upgrade-level {
+    background: rgba(255, 215, 0, 0.3);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.9em;
+}
+
+.upgrade-desc {
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    color: #ccc;
+}
+
+.upgrade-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+}
+
+.upgrade-cps {
+    color: #7fff00;
+}
+
+.upgrade-cost {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+/* Footer */
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #00c853 0%, #009624 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
+}
+
+.btn-save:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 200, 83, 0.6);
+}
+
+.btn-load {
+    background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+}
+
+.btn-load:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.6);
+}
+
+#save-status {
+    margin-left: 20px;
+    font-size: 0.9em;
+    color: #7fff00;
+    min-width: 150px;
+    text-align: center;
+}
+
+/* Scrollbar Styling */
+.upgrades-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.upgrades-panel::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.upgrades-panel::-webkit-scrollbar-thumb {
+    background: rgba(255, 215, 0, 0.5);
+    border-radius: 10px;
+}
+
+.upgrades-panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 215, 0, 0.8);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-game {
+        flex-direction: column;
+    }
+    
+    .cookie-area, .upgrades-panel {
+        min-width: 100%;
+    }
+    
+    .header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .stats {
+        width: 100%;
+        justify-content: space-around;
+    }
+}
