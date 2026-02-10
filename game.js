@@ -1,8 +1,78 @@
-console.log('🎮 Game starting...');
+console.log('🎮 Game starting with embedded sounds...');
+
+// ===== WEB AUDIO SETUP =====
+let audioContext = null;
+let soundEnabled = true;
+
+function initAudio() {
+    if (audioContext) return;
+    
+    try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        console.log('🔊 Audio context initialized');
+    } catch (e) {
+        console.log('🔇 Audio not supported:', e);
+    }
+}
+
+function playTone(frequency, duration, type = 'sine', volume = 0.1, decay = 0.1) {
+    if (!soundEnabled || !audioContext) return;
+    
+    try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.type = type;
+        oscillator.frequency.value = frequency;
+        gainNode.gain.value = volume;
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        // Add decay for natural sound
+        gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + decay);
+        
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + duration);
+    } catch (e) {
+        console.log('🔇 Sound error:', e);
+    }
+}
+
+function playSound(name) {
+    if (!soundEnabled) return;
+    
+    // Initialize audio on first user interaction
+    if (!audioContext) initAudio();
+    
+    switch(name) {
+        case 'click':
+            // Crunchy bite sound
+            playTone(600, 0.05, 'sine', 0.15, 0.08);
+            setTimeout(() => playTone(300, 0.03, 'triangle', 0.1, 0.05), 30);
+            break;
+        case 'buy':
+            // Positive coin sound
+            playTone(800, 0.04, 'sine', 0.2, 0.05);
+            setTimeout(() => playTone(1200, 0.04, 'sine', 0.15, 0.05), 50);
+            break;
+        case 'prestige':
+            // Magical sparkle (arpeggio)
+            [600, 800, 1000, 1200, 1400].forEach((freq, i) => {
+                setTimeout(() => playTone(freq, 0.06, 'sine', 0.12, 0.1), i * 80);
+            });
+            break;
+        case 'error':
+            // Soft buzz
+            playTone(200, 0.15, 'square', 0.1, 0.2);
+            break;
+    }
+}
 
 // ===== GAME STATE =====
-let cookies = 0;              // Display value (integer)
-let cookiesRaw = 0;           // Internal value (float) - CRITICAL FIX
+let cookies = 0;
+let cookiesRaw = 0;
 let cookiesPerSecond = 0;
 let prestigeMultiplier = 1;
 let lastUpdate = Date.now();
@@ -28,6 +98,11 @@ const upgradeDescs = {
     temple: "Worship the cookie god", wizard: "Summons cookies with magic"
 };
 
+const upgradeIcons = {
+    cursor: "👆", grandma: "👵", farm: "🌱", mine: "⛏️",
+    factory: "🏭", bank: "🏦", temple: "⛩️", wizard: "🧙"
+};
+
 // ===== CORE FUNCTIONS =====
 function getCost(type) {
     return Math.floor(upgrades[type].baseCost * Math.pow(1.15, upgrades[type].level));
@@ -41,20 +116,20 @@ function calcCPS() {
     return total * prestigeMultiplier;
 }
 
-// CRITICAL FIX: Track raw cookies (float) and display cookies (integer)
 function addCookies(amount) {
-    cookiesRaw += amount;           // Accumulate fractional cookies
+    cookiesRaw += amount;
     const wholeCookies = Math.floor(cookiesRaw);
     
     if (wholeCookies > cookies) {
-        cookies = wholeCookies;     // Only update display when we have whole cookies
+        cookies = wholeCookies;
         updateCookieCounter();
         updateUpgradeAffordability();
     }
 }
 
 function clickCookie() {
-    // Click gives whole cookies immediately
+    playSound('click');
+    
     cookiesRaw += 1 * prestigeMultiplier;
     cookies = Math.floor(cookiesRaw);
     updateCookieCounter();
@@ -72,20 +147,84 @@ function clickCookie() {
     }
 }
 
-// ===== UPGRADE SYSTEM =====
+// ===== UPGRADE SYSTEM WITH VISUAL EFFECTS =====
 function buyUpgrade(type) {
     const cost = getCost(type);
     
     if (cookies >= cost) {
+        playSound('buy');
+        
         cookies -= cost;
-        cookiesRaw -= cost;  // Also deduct from raw
+        cookiesRaw -= cost;
         upgrades[type].level++;
         cookiesPerSecond = calcCPS();
+        
         rebuildFullUI();
         saveGame();
+        
+        // SHOW VISUAL EFFECT!
+        showUpgradeEffect(type);
+        
         showNotification(`✅ +${upgradeNames[type]} (Lv${upgrades[type].level})`);
     } else {
+        playSound('error');
         showNotification(`❌ Need ${formatNum(cost)} cookies (have ${cookies})`);
+    }
+}
+
+// SHOW FINGERS/GRANDMAS IN CONCENTRIC CIRCLES WITH ROTATION
+function showUpgradeEffect(type) {
+    const container = document.querySelector('.cookie-container');
+    if (!container) return;
+    
+    const icon = upgradeIcons[type] || '⭐';
+    
+    // Map upgrade types to layers
+    const layerMap = {
+        cursor: 1,
+        grandma: 2,
+        farm: 3,
+        mine: 4,
+        factory: 5,
+        bank: 6,
+        temple: 7,
+        wizard: 8
+    };
+    
+    const layerNum = layerMap[type];
+    if (!layerNum) return;
+    
+    // Get or create rotation layer
+    let layer = document.querySelector(`.layer-${layerNum}`);
+    if (!layer) {
+        layer = document.createElement('div');
+        layer.className = `rotation-layer layer-${layerNum}`;
+        container.appendChild(layer);
+    }
+    
+    // Clear old indicators for this upgrade type on this layer
+    layer.querySelectorAll(`.upgrade-indicator.${type}`).forEach(el => el.remove());
+    
+    // Create new indicators positioned evenly around the circle
+    const count = upgrades[type].level;
+    const maxVisible = Math.min(count, 12); // Show max 12 per layer
+    
+    for (let i = 0; i < maxVisible; i++) {
+        const indicator = document.createElement('div');
+        indicator.className = `upgrade-indicator ${type}`;
+        indicator.innerHTML = icon;
+        indicator.title = `${upgradeNames[type]} Lv${upgrades[type].level}`;
+        
+        // Position evenly around circle
+        const angle = (i / maxVisible) * Math.PI * 2;
+        const radius = 40 + (layerNum * 15); // Each layer is 15px further out
+        const x = Math.cos(angle) * radius + 100; // 100 = center
+        const y = Math.sin(angle) * radius + 100;
+        
+        indicator.style.left = `${x - 15}px`; // Center the emoji
+        indicator.style.top = `${y - 15}px`;
+        
+        layer.appendChild(indicator);
     }
 }
 
@@ -152,9 +291,14 @@ function rebuildFullUI() {
         item.className = affordable ? 'upgrade-item affordable clickable' : 'upgrade-item disabled';
         item.setAttribute('data-upgrade', type);
         
+        // Add icon to upgrade name
+        const icon = upgradeIcons[type] || '';
+        
         item.innerHTML = `
             <div class="upgrade-header">
-                <div class="upgrade-name">${upgradeNames[type]}</div>
+                <div class="upgrade-name">
+                    <span>${icon}</span> ${upgradeNames[type]}
+                </div>
                 <div class="upgrade-level">Lv ${upgrades[type].level}</div>
             </div>
             <div class="upgrade-desc">${upgradeDescs[type]}</div>
@@ -165,6 +309,15 @@ function rebuildFullUI() {
         `;
         
         list.appendChild(item);
+    }
+    
+    // Rebuild ALL visual effects (all layers)
+    document.querySelectorAll('.rotation-layer').forEach(el => el.remove());
+    
+    for (const type in upgrades) {
+        if (upgrades[type].level > 0) {
+            showUpgradeEffect(type);
+        }
     }
 }
 
@@ -179,7 +332,7 @@ function formatNum(num) {
 function saveGame() {
     try {
         localStorage.setItem('idleGameSave', JSON.stringify({
-            cookies, cookiesRaw, cookiesPerSecond, prestigeMultiplier, upgrades, timestamp: Date.now()
+            cookies, cookiesRaw, cookiesPerSecond, prestigeMultiplier, upgrades, soundEnabled, timestamp: Date.now()
         }));
         showStatus('✅ Saved');
     } catch(e) {}
@@ -191,9 +344,12 @@ function loadGame() {
         if (data) {
             const s = JSON.parse(data);
             cookies = Math.floor(s.cookies) || 0;
-            cookiesRaw = s.cookiesRaw || s.cookies || 0;  // Load raw value
+            cookiesRaw = s.cookiesRaw || s.cookies || 0;
             cookiesPerSecond = s.cookiesPerSecond || 0;
             prestigeMultiplier = s.prestigeMultiplier || 1;
+            soundEnabled = s.soundEnabled !== false; // Default true
+            updateSoundButton();
+            
             if (s.upgrades) {
                 for (const t in s.upgrades) {
                     if (upgrades[t]) {
@@ -226,6 +382,30 @@ function showNotification(msg) {
     }
 }
 
+// ===== TOGGLE SOUND =====
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    updateSoundButton();
+    saveGame();
+    
+    if (soundEnabled && audioContext) {
+        playSound('buy'); // Test sound on enable
+    }
+}
+
+function updateSoundButton() {
+    const btn = document.getElementById('sound-btn');
+    if (!btn) return;
+    
+    if (soundEnabled) {
+        btn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        btn.classList.remove('muted');
+    } else {
+        btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        btn.classList.add('muted');
+    }
+}
+
 // ===== GAME LOOP =====
 function gameLoop() {
     const now = Date.now();
@@ -233,10 +413,29 @@ function gameLoop() {
     lastUpdate = now;
     
     if (cookiesPerSecond > 0) {
-        addCookies(cookiesPerSecond * delta);  // Accumulates fractional cookies
+        addCookies(cookiesPerSecond * delta);
     }
     
     requestAnimationFrame(gameLoop);
+}
+
+// ===== PRESTIGE =====
+function triggerPrestige() {
+    if (cookies >= 1000000) {
+        playSound('prestige');
+        
+        const mult = Math.floor(Math.sqrt(cookies / 1000000));
+        prestigeMultiplier = 1 + mult * 0.1;
+        cookies = 0;
+        cookiesRaw = 0;
+        for (const t in upgrades) upgrades[t].level = 0;
+        cookiesPerSecond = 0;
+        rebuildFullUI();
+        showNotification(`🌟 Prestige! +${mult * 10}% multiplier`);
+    } else {
+        playSound('error');
+        showNotification(`❌ Need 1,000,000 cookies to prestige!`);
+    }
 }
 
 // ===== INIT =====
@@ -247,30 +446,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) {
             const s = JSON.parse(data);
             if (typeof s.cookies === 'number' && !Number.isInteger(s.cookies) && !s.cookiesRaw) {
-                console.log('🧹 Cleaning old save format...');
                 localStorage.removeItem('idleGameSave');
             }
         }
     } catch(e) {}
     
     const cookieArea = document.querySelector('.cookie-area');
-    if (cookieArea) cookieArea.addEventListener('click', clickCookie);
+    if (cookieArea) {
+        cookieArea.addEventListener('click', () => {
+            // First user interaction - initialize audio
+            if (!audioContext) initAudio();
+            clickCookie();
+        });
+    }
     
-    document.getElementById('prestige-btn')?.addEventListener('click', () => {
-        if (cookies >= 1000000) {
-            const mult = Math.floor(Math.sqrt(cookies / 1000000));
-            prestigeMultiplier = 1 + mult * 0.1;
-            cookies = 0;
-            cookiesRaw = 0;
-            for (const t in upgrades) upgrades[t].level = 0;
-            cookiesPerSecond = 0;
-            rebuildFullUI();
-            showNotification(`🌟 Prestige! +${mult * 10}% multiplier`);
-        }
-    });
+    document.getElementById('prestige-btn')?.addEventListener('click', triggerPrestige);
     
     document.getElementById('save-btn')?.addEventListener('click', saveGame);
     document.getElementById('load-btn')?.addEventListener('click', loadGame);
+    
+    // Sound toggle
+    document.getElementById('sound-btn')?.addEventListener('click', toggleSound);
     
     const upgradesList = document.getElementById('upgrades-list');
     if (upgradesList) {
@@ -286,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadGame();
     lastUpdate = Date.now();
     gameLoop();
-    setTimeout(() => showNotification('🍪 Auto-generating cookies now works!'), 1000);
+    setTimeout(() => showNotification('👆🔊 Click cookie to enable sounds!'), 1500);
 });
 
 setInterval(saveGame, 60000);

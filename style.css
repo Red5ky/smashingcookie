@@ -12,16 +12,19 @@ body {
     justify-content: center;
     align-items: center;
     color: #fff;
+    padding: 10px;
 }
 
 .game-container {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    padding: 20px;
-    max-width: 1000px;
+    padding: 15px;
+    max-width: 950px;
     width: 95%;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    overflow: hidden;
 }
 
 /* Header */
@@ -29,31 +32,33 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 12px 15px;
     background: rgba(255, 255, 255, 0.15);
     border-radius: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .stats {
     display: flex;
-    gap: 30px;
+    gap: 20px;
 }
 
 .stat-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 1.3em;
+    gap: 8px;
+    font-size: 1.2em;
     font-weight: bold;
 }
 
 .stat-item i {
-    font-size: 1.8em;
+    font-size: 1.6em;
 }
 
 #cookie-count {
-    font-size: 1.8em;
+    font-size: 1.7em;
     font-weight: bold;
     color: #ffd700;
 }
@@ -63,13 +68,14 @@ body {
     background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
     color: #333;
     border: none;
-    padding: 12px 25px;
+    padding: 10px 20px;
     border-radius: 50px;
-    font-size: 1.1em;
+    font-size: 1em;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s;
     box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    min-width: 140px;
 }
 
 .btn-prestige:hover {
@@ -86,17 +92,18 @@ body {
 /* Main Game Area */
 .main-game {
     display: flex;
-    gap: 30px;
+    gap: 20px;
     flex-wrap: wrap;
+    margin-bottom: 15px;
 }
 
-/* Cookie Area */
+/* Cookie Area - COMPACT */
 .cookie-area {
     flex: 1;
-    min-width: 300px;
+    min-width: 260px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    padding: 40px;
+    padding: 30px 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -104,6 +111,7 @@ body {
     transition: all 0.2s;
     position: relative;
     overflow: hidden;
+    height: 350px;
 }
 
 .cookie-area:hover {
@@ -111,18 +119,56 @@ body {
     transform: scale(1.02);
 }
 
+.cookie-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .cookie {
     position: relative;
+    z-index: 10;
 }
 
 .cookie i {
     color: #ffd700;
     transition: all 0.1s;
     animation: pulse 2s infinite;
+    font-size: 6rem;
 }
 
 .cookie-area:active .cookie i {
     transform: scale(0.9);
+}
+
+/* UPGRADE VISUAL EFFECTS */
+.upgrade-indicator {
+    position: absolute;
+    font-size: 1.8rem;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.5s ease-out;
+    z-index: 5;
+    animation: float 3s infinite ease-in-out;
+}
+
+.upgrade-indicator.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.upgrade-indicator.finger { color: #4CAF50; }
+.upgrade-indicator.grandma { color: #FF5722; }
+.upgrade-indicator.farm { color: #8BC34A; }
+.upgrade-indicator.mine { color: #9E9E9E; }
+.upgrade-indicator.factory { color: #3F51B5; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-10px) scale(1.1); }
 }
 
 @keyframes pulse {
@@ -159,33 +205,35 @@ body {
     }
 }
 
-/* Upgrades Panel */
+/* Upgrades Panel - COMPACT */
 .upgrades-panel {
     flex: 1;
-    min-width: 300px;
+    min-width: 260px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    padding: 25px;
-    max-height: 600px;
+    padding: 20px 15px;
+    max-height: 350px;
     overflow-y: auto;
 }
 
 .upgrades-panel h2 {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-align: center;
-    font-size: 1.8em;
+    font-size: 1.6em;
     color: #ffd700;
+    font-weight: bold;
 }
 
 /* Upgrade Items */
 .upgrade-item {
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    padding: 15px;
-    margin-bottom: 15px;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
     cursor: pointer;
     transition: all 0.3s;
     border: 2px solid transparent;
+    position: relative;
 }
 
 .upgrade-item:hover {
@@ -193,51 +241,57 @@ body {
     transform: translateX(5px);
 }
 
-.upgrade-item:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
-
 .upgrade-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    font-weight: bold;
 }
 
 .upgrade-name {
-    font-size: 1.2em;
-    font-weight: bold;
+    font-size: 1.1em;
     color: #ffd700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .upgrade-level {
     background: rgba(255, 215, 0, 0.3);
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.9em;
+    padding: 2px 8px;
+    border-radius: 15px;
+    font-size: 0.85em;
+    font-weight: bold;
 }
 
 .upgrade-desc {
-    font-size: 0.95em;
-    margin-bottom: 8px;
-    color: #ccc;
+    font-size: 0.9em;
+    margin-bottom: 6px;
+    color: #ddd;
+    line-height: 1.3;
 }
 
 .upgrade-stats {
     display: flex;
     justify-content: space-between;
-    font-size: 0.9em;
+    font-size: 0.85em;
+    margin-top: 4px;
 }
 
 .upgrade-cps {
     color: #7fff00;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .upgrade-cost {
     color: #ff6b6b;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 /* GREEN HIGHLIGHT WHEN AFFORDABLE */
@@ -257,9 +311,10 @@ body {
     font-weight: bold;
 }
 
+/* DISABLED STATE */
 .upgrade-item.disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
+    opacity: 0.65;
+    cursor: not-allowed !important;
 }
 
 .upgrade-item.disabled:hover {
@@ -267,24 +322,27 @@ body {
     background: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Footer */
+/* Footer - COMPACT */
 .footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
-    padding: 20px;
-    margin-top: 20px;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    flex-wrap: wrap;
 }
 
 .btn {
-    padding: 12px 30px;
+    padding: 10px 22px;
     border: none;
     border-radius: 50px;
-    font-size: 1em;
+    font-size: 0.95em;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s;
+    min-width: 120px;
 }
 
 .btn-save {
@@ -310,16 +368,17 @@ body {
 }
 
 #save-status {
-    margin-left: 20px;
+    margin: 0 10px;
     font-size: 0.9em;
     color: #7fff00;
-    min-width: 150px;
+    min-width: 130px;
     text-align: center;
+    font-weight: bold;
 }
 
 /* Scrollbar Styling */
 .upgrades-panel::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 .upgrades-panel::-webkit-scrollbar-track {
@@ -336,6 +395,39 @@ body {
     background: rgba(255, 215, 0, 0.8);
 }
 
+/* Sound Button */
+.header-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-sound {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffd700;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.3em;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-sound:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.btn-sound.muted {
+    color: #ff6b6b;
+    opacity: 0.7;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .main-game {
@@ -344,59 +436,141 @@ body {
     
     .cookie-area, .upgrades-panel {
         min-width: 100%;
+        height: auto;
+    }
+    
+    .cookie-area {
+        padding: 25px 15px;
+        height: 300px;
+    }
+    
+    .cookie i {
+        font-size: 5rem;
     }
     
     .header {
         flex-direction: column;
-        gap: 15px;
+        text-align: center;
     }
     
     .stats {
         width: 100%;
         justify-content: space-around;
     }
+    
+    .footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 250px;
+    }
 }
-
-/* CLICKABLE UPGRADES - BIGGER HIT AREA */
-.upgrade-item.clickable {
-    cursor: pointer !important;
+/* ===== ROTATING UPGRADE CIRCLES ===== */
+.cookie-container {
     position: relative;
-    overflow: hidden;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.upgrade-item.clickable::before {
-    content: '👆 CLICK TO BUY';
+/* ROTATION CONTAINERS - Each layer rotates independently */
+.rotation-layer {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    background: rgba(100, 255, 100, 0.9);
-    color: #000;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 0.9em;
-    opacity: 0;
-    transition: all 0.3s;
-    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-origin: center;
 }
 
-.upgrade-item.clickable:hover::before {
-    transform: translate(-50%, -50%) scale(1);
+/* LAYER 1: Cursor (Fingers) - Rotates clockwise */
+.layer-1 {
+    animation: rotate-clockwise 20s linear infinite;
+}
+
+/* LAYER 2: Grandma - Rotates counter-clockwise */
+.layer-2 {
+    animation: rotate-counter 25s linear infinite;
+}
+
+/* LAYER 3: Farm - Rotates clockwise */
+.layer-3 {
+    animation: rotate-clockwise 30s linear infinite;
+}
+
+/* LAYER 4: Mine - Rotates counter-clockwise */
+.layer-4 {
+    animation: rotate-counter 35s linear infinite;
+}
+
+/* LAYER 5: Factory - Rotates clockwise */
+.layer-5 {
+    animation: rotate-clockwise 40s linear infinite;
+}
+
+/* LAYER 6: Bank - Rotates counter-clockwise */
+.layer-6 {
+    animation: rotate-counter 45s linear infinite;
+}
+
+/* LAYER 7: Temple - Rotates clockwise */
+.layer-7 {
+    animation: rotate-clockwise 50s linear infinite;
+}
+
+/* LAYER 8: Wizard - Rotates counter-clockwise */
+.layer-8 {
+    animation: rotate-counter 55s linear infinite;
+}
+
+@keyframes rotate-clockwise {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes rotate-counter {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+}
+
+/* INDICATOR STYLES */
+.upgrade-indicator {
+    position: absolute;
+    font-size: 1.8rem;
     opacity: 1;
-}
-
-.upgrade-item.clickable:hover {
     z-index: 5;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
 }
 
-/* DISABLED STATE */
-.upgrade-item.disabled {
-    opacity: 0.6;
-    cursor: not-allowed !important;
-    pointer-events: none; /* CRITICAL: Prevents clicks entirely */
+/* Position indicators on different radii based on layer */
+.layer-1 .upgrade-indicator { font-size: 1.6rem; }
+.layer-2 .upgrade-indicator { font-size: 1.7rem; }
+.layer-3 .upgrade-indicator { font-size: 1.8rem; }
+.layer-4 .upgrade-indicator { font-size: 1.9rem; }
+.layer-5 .upgrade-indicator { font-size: 2rem; }
+.layer-6 .upgrade-indicator { font-size: 2.1rem; }
+.layer-7 .upgrade-indicator { font-size: 2.2rem; }
+.layer-8 .upgrade-indicator { font-size: 2.3rem; }
+
+/* Hover effect on cookie area shows all indicators */
+.cookie-area:hover .upgrade-indicator {
+    transform: scale(1.2);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
 }
 
-.upgrade-item.disabled::before {
-    display: none !important;
-}
+/* Colors for each layer */
+.layer-1 .upgrade-indicator { color: #4CAF50; }    /* Green fingers */
+.layer-2 .upgrade-indicator { color: #FF5722; }    /* Orange grandmas */
+.layer-3 .upgrade-indicator { color: #8BC34A; }    /* Light green farms */
+.layer-4 .upgrade-indicator { color: #9E9E9E; }    /* Grey mines */
+.layer-5 .upgrade-indicator { color: #3F51B5; }    /* Blue factories */
+.layer-6 .upgrade-indicator { color: #FF9800; }    /* Orange banks */
+.layer-7 .upgrade-indicator { color: #9C27B0; }    /* Purple temples */
+.layer-8 .upgrade-indicator { color: #3F51B5; }    /* Blue wizards */
