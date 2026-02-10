@@ -420,19 +420,6 @@ body {
     background: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* ===== AD SLOT STYLING ===== */
-.ad-slot {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 15px 0;
-    min-height: 280px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 15px;
-    padding: 15px;
-    position: relative;
-}
-
 .ad-slot::before {
     content: "Advertisement";
     position: absolute;
@@ -704,4 +691,67 @@ body {
     .game-container, .upgrades-panel {
         -webkit-overflow-scrolling: touch;
     }
+}
+/* ===== FIXED AD SLOT - FULL WIDTH BELOW CONTENT ===== */
+.ad-slot {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Prevent vertical centering of tall ads */
+    margin: 20px 0;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 18px;
+    padding: 20px 15px;
+    position: relative;
+    width: 100%;
+    min-height: auto; /* CRITICAL: Let ad determine height */
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.ad-slot::before {
+    content: "Advertisement";
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 0.78em;
+    color: rgba(255, 255, 255, 0.65);
+    background: rgba(0, 0, 0, 0.25);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+}
+
+/* Target Adsterra container specifically */
+#container-49e8f7d787ee9f43ebf2867f83ece867 {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 280px; /* Minimum space for ad content */
+    max-width: 728px; /* Prevent oversizing on wide screens */
+    margin: 0 auto; /* Center the ad content */
+}
+
+/* Clean up ad internals */
+#container-49e8f7d787ee9f43ebf2867f83ece867 * {
+    box-sizing: border-box !important;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .ad-slot {
+        padding: 18px 12px;
+        margin: 18px 0;
+        border-radius: 16px;
+    }
+    
+    #container-49e8f7d787ee9f43ebf2867f83ece867 {
+        min-height: 250px;
+    }
+}
+
+/* Hide empty container during local testing */
+#container-49e8f7d787ee9f43ebf2867f83ece867:empty {
+    display: none;
 }
