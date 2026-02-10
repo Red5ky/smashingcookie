@@ -240,6 +240,33 @@ body {
     font-weight: bold;
 }
 
+/* GREEN HIGHLIGHT WHEN AFFORDABLE */
+.upgrade-item.affordable {
+    background: rgba(100, 255, 100, 0.15) !important;
+    border-left: 4px solid #55cc55 !important;
+    box-shadow: 0 0 10px rgba(100, 255, 100, 0.3) !important;
+}
+
+.upgrade-item.affordable:hover {
+    background: rgba(100, 255, 100, 0.25) !important;
+    transform: translateX(5px);
+}
+
+.upgrade-item.affordable .upgrade-cost {
+    color: #55cc55 !important;
+    font-weight: bold;
+}
+
+.upgrade-item.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.upgrade-item.disabled:hover {
+    transform: none;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
 /* Footer */
 .footer {
     display: flex;
@@ -328,4 +355,48 @@ body {
         width: 100%;
         justify-content: space-around;
     }
+}
+
+/* CLICKABLE UPGRADES - BIGGER HIT AREA */
+.upgrade-item.clickable {
+    cursor: pointer !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.upgrade-item.clickable::before {
+    content: '👆 CLICK TO BUY';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: rgba(100, 255, 100, 0.9);
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9em;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 10;
+}
+
+.upgrade-item.clickable:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+.upgrade-item.clickable:hover {
+    z-index: 5;
+}
+
+/* DISABLED STATE */
+.upgrade-item.disabled {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+    pointer-events: none; /* CRITICAL: Prevents clicks entirely */
+}
+
+.upgrade-item.disabled::before {
+    display: none !important;
 }

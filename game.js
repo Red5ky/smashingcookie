@@ -1,289 +1,263 @@
-// ==================== GAME STATE ====================
-const game = {
-    cookies: 0,
-    cookiesPerClick: 1,
-    cookiesPerSecond: 0,
-    prestigeMultiplier: 1,
-    lastUpdate: Date.now(),
-    upgrades: {
-        cursor: { level: 0, baseCost: 15, cps: 0.1, owned: 0 },
-        grandma: { level: 0, baseCost: 100, cps: 1, owned: 0 },
-        farm: { level: 0, baseCost: 1100, cps: 8, owned: 0 },
-        mine: { level: 0, baseCost: 12000, cps: 47, owned: 0 },
-        factory: { level: 0, baseCost: 130000, cps: 260, owned: 0 },
-        bank: { level: 0, baseCost: 1400000, cps: 1400, owned: 0 },
-        temple: { level: 0, baseCost: 20000000, cps: 7800, owned: 0 },
-        wizard: { level: 0, baseCost: 330000000, cps: 44000, owned: 0 }
-    }
+console.log('🎮 Game starting...');
+
+// ===== GAME STATE =====
+let cookies = 0;
+let cookiesPerSecond = 0;
+let prestigeMultiplier = 1;
+let lastUpdate = Date.now();
+const upgrades = {
+    cursor: { level: 0, baseCost: 10, cps: 0.1 },
+    grandma: { level: 0, baseCost: 100, cps: 1 },
+    farm: { level: 0, baseCost: 1100, cps: 8 },
+    mine: { level: 0, baseCost: 12000, cps: 47 },
+    factory: { level: 0, baseCost: 130000, cps: 260 },
+    bank: { level: 0, baseCost: 1400000, cps: 1400 },
+    temple: { level: 0, baseCost: 20000000, cps: 7800 },
+    wizard: { level: 0, baseCost: 330000000, cps: 44000 }
 };
 
-// ==================== UPGRADE DEFINITIONS ====================
-const upgradeDefs = {
-    cursor: { name: "Cursor", desc: "Automatically clicks once every 10 seconds", icon: "mouse-pointer" },
-    grandma: { name: "Grandma", desc: "A nice grandma to bake cookies for you", icon: "user-friends" },
-    farm: { name: "Cookie Farm", desc: "Grows cookie plants from cookie seeds", icon: "seedling" },
-    mine: { name: "Cookie Mine", desc: "Mines out cookie ores from the ground", icon: "mountain" },
-    factory: { name: "Cookie Factory", desc: "Produces large quantities of cookies", icon: "industry" },
-    bank: { name: "Bank", desc: "Generates cookies from interest", icon: "building-columns" },
-    temple: { name: "Temple", desc: "Worship the great cookie god", icon: "place-of-worship" },
-    wizard: { name: "Wizard Tower", desc: "Summons cookies with magic", icon: "hat-wizard" }
+const upgradeNames = {
+    cursor: "Cursor", grandma: "Grandma", farm: "Farm", mine: "Mine",
+    factory: "Factory", bank: "Bank", temple: "Temple", wizard: "Wizard"
 };
 
-// ==================== CORE FUNCTIONS ====================
+const upgradeDescs = {
+    cursor: "Auto-clicks every 10 seconds", grandma: "Bakes cookies", farm: "Grows cookie plants",
+    mine: "Mines cookie ores", factory: "Mass-produces cookies", bank: "Generates interest",
+    temple: "Worship the cookie god", wizard: "Summons cookies with magic"
+};
 
-// Calculate cost of next upgrade (exponential scaling)
-function getUpgradeCost(upgrade) {
-    const baseCost = game.upgrades[upgrade].baseCost;
-    const level = game.upgrades[upgrade].level;
-    return Math.floor(baseCost * Math.pow(1.15, level));
+// ===== CORE FUNCTIONS =====
+function getCost(type) {
+    return Math.floor(upgrades[type].baseCost * Math.pow(1.15, upgrades[type].level));
 }
 
-// Calculate total CPS
-function calculateCPS() {
+function calcCPS() {
     let total = 0;
-    for (const upgrade in game.upgrades) {
-        total += game.upgrades[upgrade].cps * game.upgrades[upgrade].owned;
+    for (const type in upgrades) {
+        total += upgrades[type].cps * upgrades[type].level;
     }
-    return total * game.prestigeMultiplier;
+    return total * prestigeMultiplier;
 }
 
-// Add cookies to counter
 function addCookies(amount) {
-    game.cookies += amount;
+    cookies += amount;
     updateDisplay();
 }
 
-// Click cookie
 function clickCookie() {
-    const cookiesEarned = game.cookiesPerClick * game.prestigeMultiplier;
-    addCookies(cookiesEarned);
+    addCookies(1 * prestigeMultiplier);
     
-    // Create floating cookie animation
-    createFloatingCookie(cookiesEarned);
-}
-
-// Create floating cookie animation
-function createFloatingCookie(amount) {
+    // Floating cookie
     const container = document.getElementById('floating-cookies');
-    const cookie = document.createElement('div');
-    cookie.className = 'floating-cookie';
-    cookie.innerHTML = `<i class="fas fa-cookie"></i> +${formatNumber(amount)}`;
-    cookie.style.left = `${Math.random() * 60 + 20}%`;
-    container.appendChild(cookie);
-    
-    // Remove after animation
-    setTimeout(() => {
-        cookie.remove();
-    }, 1500);
+    if (container) {
+        const el = document.createElement('div');
+        el.className = 'floating-cookie';
+        el.innerHTML = `<i class="fas fa-cookie"></i> +${Math.floor(1 * prestigeMultiplier)}`;
+        el.style.left = `${Math.random() * 60 + 20}%`;
+        el.style.bottom = '20%';
+        container.appendChild(el);
+        setTimeout(() => el.remove(), 1500);
+    }
 }
 
-// Buy upgrade
-function buyUpgrade(upgradeType) {
-    const cost = getUpgradeCost(upgradeType);
+// ===== UPGRADE SYSTEM =====
+function buyUpgrade(type) {
+    const cost = getCost(type);
+    console.log(`🛒 Buy ${type}: cost=${cost}, have=${cookies}`);
     
-    if (game.cookies >= cost) {
-        game.cookies -= cost;
-        game.upgrades[upgradeType].level++;
-        game.upgrades[upgradeType].owned++;
-        game.cookiesPerSecond = calculateCPS();
-        updateDisplay();
+    if (cookies >= cost) {
+        cookies -= cost;
+        upgrades[type].level++;
+        cookiesPerSecond = calcCPS();
+        console.log(`✅ SUCCESS! ${type} level=${upgrades[type].level}, cookies left=${cookies}`);
+        
+        // Force immediate UI update
+        setTimeout(updateDisplay, 10);
+        
         saveGame();
+        showNotification(`✅ +${upgradeNames[type]} (Lv${upgrades[type].level})`);
+    } else {
+        console.log(`❌ Cannot afford ${type}`);
+        showNotification(`❌ Need ${formatNum(cost)} cookies`);
     }
 }
 
-// Prestige system
-function prestige() {
-    if (game.cookies >= 1000000) {
-        const multiplier = Math.floor(Math.sqrt(game.cookies / 1000000));
-        game.prestigeMultiplier = 1 + (multiplier * 0.1);
-        resetGame();
-        showNotification(`Prestige successful! +${(multiplier * 10)}% CPS multiplier!`);
-    }
-}
-
-// Reset game for prestige
-function resetGame() {
-    game.cookies = 0;
-    game.cookiesPerClick = 1;
-    game.cookiesPerSecond = 0;
-    
-    for (const upgrade in game.upgrades) {
-        game.upgrades[upgrade].level = 0;
-        game.upgrades[upgrade].owned = 0;
-    }
-    
-    updateDisplay();
-}
-
-// ==================== DISPLAY FUNCTIONS ====================
-
+// ===== DISPLAY =====
 function updateDisplay() {
-    // Update cookie count
-    document.getElementById('cookie-count').textContent = formatNumber(game.cookies);
+    // Update cookie counter
+    const cookieCountEl = document.getElementById('cookie-count');
+    const cpsEl = document.getElementById('cps');
+    if (cookieCountEl) cookieCountEl.textContent = formatNum(cookies);
+    if (cpsEl) cpsEl.textContent = formatNum(cookiesPerSecond);
     
-    // Update CPS
-    document.getElementById('cps').textContent = formatNumber(game.cookiesPerSecond);
+    console.log(`🔄 UI Update: cookies=${Math.floor(cookies)}, CPS=${cookiesPerSecond}`);
     
-    // Update prestige button
-    const prestigeBtn = document.getElementById('prestige-btn');
-    const prestigeMult = Math.floor(Math.sqrt(game.cookies / 1000000));
-    prestigeBtn.innerHTML = `<i class="fas fa-star"></i> Prestige (${prestigeMult}x)`;
-    prestigeBtn.disabled = game.cookies < 1000000;
+    // Prestige button
+    const btn = document.getElementById('prestige-btn');
+    const mult = Math.floor(Math.sqrt(cookies / 1000000));
+    if (btn) {
+        btn.innerHTML = `<i class="fas fa-star"></i> Prestige (${mult}x)`;
+        btn.disabled = cookies < 1000000;
+    }
     
-    // Update upgrades list
-    updateUpgradesList();
-}
-
-function updateUpgradesList() {
+    // Render upgrades - COMPLETELY REBUILD
     const list = document.getElementById('upgrades-list');
+    if (!list) {
+        console.error('❌ upgrades-list not found!');
+        return;
+    }
+    
+    // Clear and rebuild
     list.innerHTML = '';
     
-    for (const upgradeType in game.upgrades) {
-        const upgrade = game.upgrades[upgradeType];
-        const cost = getUpgradeCost(upgradeType);
-        const canAfford = game.cookies >= cost;
-        const def = upgradeDefs[upgradeType];
+    for (const type in upgrades) {
+        const cost = getCost(type);
+        const affordable = cookies >= cost;
         
         const item = document.createElement('div');
-        item.className = 'upgrade-item';
-        if (!canAfford) item.classList.add('disabled');
+        item.className = 'upgrade-item' + (affordable ? ' affordable clickable' : ' disabled');
+        item.setAttribute('data-upgrade', type);
         
         item.innerHTML = `
             <div class="upgrade-header">
-                <div class="upgrade-name">
-                    <i class="fas fa-${def.icon}"></i> ${def.name}
-                </div>
-                <div class="upgrade-level">Level ${upgrade.level}</div>
+                <div class="upgrade-name">${upgradeNames[type]}</div>
+                <div class="upgrade-level">Lv ${upgrades[type].level}</div>
             </div>
-            <div class="upgrade-desc">${def.desc}</div>
+            <div class="upgrade-desc">${upgradeDescs[type]}</div>
             <div class="upgrade-stats">
-                <div class="upgrade-cps">
-                    <i class="fas fa-bolt"></i> ${formatNumber(upgrade.cps * game.prestigeMultiplier)} CPS
-                </div>
-                <div class="upgrade-cost">
-                    <i class="fas fa-cookie-bite"></i> ${formatNumber(cost)}
-                </div>
+                <div class="upgrade-cps"><i class="fas fa-bolt"></i> ${formatNum(upgrades[type].cps * prestigeMultiplier)} CPS</div>
+                <div class="upgrade-cost"><i class="fas fa-cookie-bite"></i> ${formatNum(cost)}</div>
             </div>
         `;
         
-        if (canAfford) {
-            item.onclick = () => buyUpgrade(upgradeType);
-        }
-        
         list.appendChild(item);
     }
+    
+    console.log('✅ UI fully rebuilt');
 }
 
-// ==================== GAME LOOP ====================
-
-function gameLoop() {
-    const now = Date.now();
-    const deltaTime = (now - game.lastUpdate) / 1000;
-    game.lastUpdate = now;
-    
-    // Add cookies from CPS
-    if (game.cookiesPerSecond > 0) {
-        addCookies(game.cookiesPerSecond * deltaTime);
-    }
-    
-    requestAnimationFrame(gameLoop);
+function formatNum(num) {
+    if (num >= 1e9) return (num/1e9).toFixed(1) + 'B';
+    if (num >= 1e6) return (num/1e6).toFixed(1) + 'M';
+    if (num >= 1e3) return (num/1e3).toFixed(1) + 'K';
+    return Math.floor(num);
 }
 
-// ==================== SAVE/LOAD SYSTEM ====================
-
+// ===== SAVE/LOAD =====
 function saveGame() {
-    const saveData = {
-        cookies: game.cookies,
-        cookiesPerSecond: game.cookiesPerSecond,
-        prestigeMultiplier: game.prestigeMultiplier,
-        upgrades: game.upgrades,
-        timestamp: Date.now()
-    };
-    
-    localStorage.setItem('cookieClickerSave', JSON.stringify(saveData));
-    showSaveStatus('Game saved! 🎮');
+    try {
+        localStorage.setItem('idleGameSave', JSON.stringify({
+            cookies, cookiesPerSecond, prestigeMultiplier, upgrades, timestamp: Date.now()
+        }));
+        showStatus('✅ Saved');
+    } catch(e) {
+        console.error('Save failed:', e);
+    }
 }
 
 function loadGame() {
-    const saveData = localStorage.getItem('cookieClickerSave');
-    
-    if (saveData) {
+    const data = localStorage.getItem('idleGameSave');
+    if (data) {
         try {
-            const parsed = JSON.parse(saveData);
-            game.cookies = parsed.cookies || 0;
-            game.cookiesPerSecond = parsed.cookiesPerSecond || 0;
-            game.prestigeMultiplier = parsed.prestigeMultiplier || 1;
-            game.lastUpdate = Date.now();
-            
-            // Load upgrades
-            if (parsed.upgrades) {
-                for (const upgrade in parsed.upgrades) {
-                    if (game.upgrades[upgrade]) {
-                        game.upgrades[upgrade] = { ...parsed.upgrades[upgrade] };
+            const s = JSON.parse(data);
+            console.log('📥 Loading:', s);
+            cookies = s.cookies || 0;
+            cookiesPerSecond = s.cookiesPerSecond || 0;
+            prestigeMultiplier = s.prestigeMultiplier || 1;
+            if (s.upgrades) {
+                for (const t in s.upgrades) {
+                    if (upgrades[t]) {
+                        upgrades[t].level = s.upgrades[t].level || 0;
                     }
                 }
             }
-            
+            lastUpdate = Date.now();
             updateDisplay();
-            showSaveStatus('Game loaded! 🎉');
-        } catch (e) {
-            console.error('Error loading save:', e);
-            showSaveStatus('Load failed! ❌');
+            showStatus('🎮 Loaded');
+        } catch(e) { 
+            console.error('Load error:', e);
         }
-    } else {
-        showSaveStatus('No save found! ❌');
     }
 }
 
-function showSaveStatus(message) {
-    const status = document.getElementById('save-status');
-    status.textContent = message;
-    setTimeout(() => {
-        status.textContent = '';
-    }, 3000);
+function showStatus(msg) {
+    const el = document.getElementById('save-status');
+    if (el) {
+        el.textContent = msg;
+        setTimeout(() => { if(el.textContent === msg) el.textContent = ''; }, 2000);
+    }
 }
 
-function showNotification(message) {
-    const status = document.getElementById('save-status');
-    status.textContent = message;
-    status.style.color = '#ffd700';
-    setTimeout(() => {
-        status.textContent = '';
-    }, 5000);
+function showNotification(msg) {
+    const el = document.getElementById('save-status');
+    if (el) {
+        el.textContent = msg;
+        el.style.color = '#ffd700';
+        setTimeout(() => { if(el.textContent === msg) el.textContent = ''; }, 3000);
+    }
 }
 
-// ==================== UTILITY FUNCTIONS ====================
-
-function formatNumber(num) {
-    if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
-    if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
-    if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
-    return Math.floor(num).toString();
+// ===== GAME LOOP =====
+function gameLoop() {
+    const now = Date.now();
+    const delta = (now - lastUpdate) / 1000;
+    lastUpdate = now;
+    if (cookiesPerSecond > 0) addCookies(cookiesPerSecond * delta);
+    requestAnimationFrame(gameLoop);
 }
 
-// ==================== AUTO-SAVE ====================
-
-setInterval(saveGame, 60000); // Auto-save every minute
-
-// ==================== INITIALIZATION ====================
-
-// Load game on startup
-window.onload = function() {
-    loadGame();
-    game.lastUpdate = Date.now();
-    gameLoop();
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 Initializing...');
     
-    // Show welcome message
-    setTimeout(() => {
-        showNotification('Welcome to Cookie Clicker! 🍪');
-    }, 1000);
-};
-
-// Handle visibility change (pause when tab is hidden)
-document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-        game.lastUpdate = Date.now(); // Reset timer when hidden
-    } else {
-        game.lastUpdate = Date.now(); // Reset when shown again
+    // Cookie click
+    const cookieArea = document.querySelector('.cookie-area');
+    if (cookieArea) {
+        cookieArea.addEventListener('click', clickCookie);
+        console.log('✅ Cookie handler ready');
     }
+    
+    // Prestige
+    document.getElementById('prestige-btn')?.addEventListener('click', () => {
+        if (cookies >= 1000000) {
+            const mult = Math.floor(Math.sqrt(cookies / 1000000));
+            prestigeMultiplier = 1 + mult * 0.1;
+            cookies = 0;
+            for (const t in upgrades) upgrades[t].level = 0;
+            cookiesPerSecond = 0;
+            updateDisplay();
+            showNotification(`🌟 Prestige! +${mult * 10}% multiplier`);
+        }
+    });
+    
+    // Save/Load
+    document.getElementById('save-btn')?.addEventListener('click', saveGame);
+    document.getElementById('load-btn')?.addEventListener('click', loadGame);
+    
+    // Event delegation for upgrades
+    const upgradesList = document.getElementById('upgrades-list');
+    if (upgradesList) {
+        upgradesList.addEventListener('click', function(e) {
+            const item = e.target.closest('.upgrade-item');
+            if (item && !item.classList.contains('disabled')) {
+                const type = item.getAttribute('data-upgrade');
+                if (type) {
+                    console.log('🖱️ Click:', type);
+                    buyUpgrade(type);
+                }
+            }
+        });
+        console.log('✅ Upgrade handler ready');
+    }
+    
+    // Start
+    loadGame();
+    lastUpdate = Date.now();
+    gameLoop();
+    setTimeout(() => showNotification('🍪 Click cookie → Buy upgrades!'), 800);
+    
+    console.log('✅ Game ready!');
 });
+
+setInterval(saveGame, 60000);
