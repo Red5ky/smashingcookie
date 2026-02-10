@@ -322,10 +322,24 @@ function rebuildFullUI() {
 }
 
 function formatNum(num) {
-    if (num >= 1e9) return (num/1e9).toFixed(1) + 'B';
-    if (num >= 1e6) return (num/1e6).toFixed(1) + 'M';
-    if (num >= 1e3) return (num/1e3).toFixed(1) + 'K';
-    return num.toString();
+    // Handle very small numbers (less than 0.1)
+    if (num < 0.1 && num > 0) {
+        return num.toFixed(2);
+    }
+    
+    // Handle fractional numbers (0.1 to 1000)
+    if (num < 1000) {
+        // Round to 1 decimal place, but remove trailing .0
+        const rounded = Math.round(num * 10) / 10;
+        return rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(1);
+    }
+    
+    // Handle thousands+
+    if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+    if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+    if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+    
+    return Math.floor(num).toString();
 }
 
 // ===== SAVE/LOAD =====
