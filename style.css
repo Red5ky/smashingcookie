@@ -23,7 +23,7 @@ body {
     max-width: 950px;
     width: 95%;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    margin: 0 auto; /* Center on page */
+    margin: 0 auto;
 }
 
 /* Header */
@@ -37,6 +37,7 @@ body {
     margin-bottom: 15px;
     flex-wrap: wrap;
     gap: 10px;
+    min-height: 60px;
 }
 
 .stats {
@@ -60,6 +61,14 @@ body {
     font-size: 1.7em;
     font-weight: bold;
     color: #ffd700;
+}
+
+/* Header Buttons Container */
+.header-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 /* Prestige Button */
@@ -86,6 +95,59 @@ body {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
+}
+
+/* Sound Button */
+.btn-sound {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffd700;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.3em;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-sound:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.btn-sound.muted {
+    color: #ff6b6b;
+    opacity: 0.7;
+}
+
+/* Toggle Number Format Button */
+.btn-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffd700;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.btn-toggle.flat {
+    color: #7fff00;
 }
 
 /* Main Game Area */
@@ -143,37 +205,102 @@ body {
     transform: scale(0.9);
 }
 
-/* UPGRADE VISUAL EFFECTS */
+/* ROTATION CONTAINERS - Each layer rotates independently */
+.rotation-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-origin: center;
+}
+
+/* LAYER 1: Cursor (Fingers) - Rotates clockwise */
+.layer-1 {
+    animation: rotate-clockwise 20s linear infinite;
+}
+
+/* LAYER 2: Grandma - Rotates counter-clockwise */
+.layer-2 {
+    animation: rotate-counter 25s linear infinite;
+}
+
+/* LAYER 3: Farm - Rotates clockwise */
+.layer-3 {
+    animation: rotate-clockwise 30s linear infinite;
+}
+
+/* LAYER 4: Mine - Rotates counter-clockwise */
+.layer-4 {
+    animation: rotate-counter 35s linear infinite;
+}
+
+/* LAYER 5: Factory - Rotates clockwise */
+.layer-5 {
+    animation: rotate-clockwise 40s linear infinite;
+}
+
+/* LAYER 6: Bank - Rotates counter-clockwise */
+.layer-6 {
+    animation: rotate-counter 45s linear infinite;
+}
+
+/* LAYER 7: Temple - Rotates clockwise */
+.layer-7 {
+    animation: rotate-clockwise 50s linear infinite;
+}
+
+/* LAYER 8: Wizard - Rotates counter-clockwise */
+.layer-8 {
+    animation: rotate-counter 55s linear infinite;
+}
+
+@keyframes rotate-clockwise {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes rotate-counter {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+}
+
+/* INDICATOR STYLES */
 .upgrade-indicator {
     position: absolute;
     font-size: 1.8rem;
-    opacity: 0;
-    transform: scale(0);
-    transition: all 0.5s ease-out;
-    z-index: 5;
-    animation: float 3s infinite ease-in-out;
-}
-
-.upgrade-indicator.visible {
     opacity: 1;
-    transform: scale(1);
+    z-index: 5;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
 }
 
-.upgrade-indicator.finger { color: #4CAF50; }
-.upgrade-indicator.grandma { color: #FF5722; }
-.upgrade-indicator.farm { color: #8BC34A; }
-.upgrade-indicator.mine { color: #9E9E9E; }
-.upgrade-indicator.factory { color: #3F51B5; }
+/* Position indicators on different radii based on layer */
+.layer-1 .upgrade-indicator { font-size: 1.6rem; }
+.layer-2 .upgrade-indicator { font-size: 1.7rem; }
+.layer-3 .upgrade-indicator { font-size: 1.8rem; }
+.layer-4 .upgrade-indicator { font-size: 1.9rem; }
+.layer-5 .upgrade-indicator { font-size: 2rem; }
+.layer-6 .upgrade-indicator { font-size: 2.1rem; }
+.layer-7 .upgrade-indicator { font-size: 2.2rem; }
+.layer-8 .upgrade-indicator { font-size: 2.3rem; }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-10px) scale(1.1); }
+/* Hover effect on cookie area shows all indicators */
+.cookie-area:hover .upgrade-indicator {
+    transform: scale(1.2);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
 }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
+/* Colors for each layer */
+.layer-1 .upgrade-indicator { color: #4CAF50; }    /* Green fingers */
+.layer-2 .upgrade-indicator { color: #FF5722; }    /* Orange grandmas */
+.layer-3 .upgrade-indicator { color: #8BC34A; }    /* Light green farms */
+.layer-4 .upgrade-indicator { color: #9E9E9E; }    /* Grey mines */
+.layer-5 .upgrade-indicator { color: #3F51B5; }    /* Blue factories */
+.layer-6 .upgrade-indicator { color: #FF9800; }    /* Orange banks */
+.layer-7 .upgrade-indicator { color: #9C27B0; }    /* Purple temples */
+.layer-8 .upgrade-indicator { color: #3F51B5; }    /* Blue wizards */
 
 /* Floating Cookies Animation */
 .floating-cookies {
@@ -394,291 +521,176 @@ body {
     background: rgba(255, 215, 0, 0.8);
 }
 
-/* Sound Button */
-.header-buttons {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.btn-sound {
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffd700;
-    border: none;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    font-size: 1.3em;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-}
-
-.btn-sound:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
-}
-
-.btn-sound.muted {
-    color: #ff6b6b;
-    opacity: 0.7;
-}
-
-/* Responsive Design */
+/* ===== COMPACT MOBILE LAYOUT ===== */
 @media (max-width: 768px) {
-    .main-game {
-        flex-direction: column;
+    /* Header buttons - smaller and compact */
+    .header-buttons {
+        gap: 5px;
     }
     
-    .cookie-area, .upgrades-panel {
-        min-width: 100%;
-        height: auto;
+    .btn-sound, .btn-toggle, .btn-prestige {
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        min-width: auto;
     }
     
+    .btn-sound i, .btn-toggle i {
+        font-size: 0.9em;
+    }
+    
+    .btn-prestige {
+        padding: 8px 12px;
+        font-size: 0.85em;
+        min-width: 110px;
+        width: auto;
+    }
+    
+    /* Stats - smaller text */
+    .stat-item {
+        gap: 6px;
+        font-size: 1em;
+    }
+    
+    .stat-item i {
+        font-size: 1.3em;
+    }
+    
+    #cookie-count {
+        font-size: 1.4em;
+    }
+    
+    /* Cookie area - more compact */
     .cookie-area {
-        padding: 25px 15px;
-        height: 300px;
+        height: 240px;
+        padding: 20px 10px;
     }
     
     .cookie i {
-        font-size: 5rem;
+        font-size: 4rem;
     }
     
-    .header {
-        flex-direction: column;
-        text-align: center;
+    /* Upgrades panel - smaller items */
+    .upgrades-panel {
+        max-height: 280px;
+        padding: 15px;
     }
     
-    .stats {
-        width: 100%;
-        justify-content: space-around;
+    .upgrades-panel h2 {
+        font-size: 1.4em;
+        margin-bottom: 12px;
     }
     
+    .upgrade-item {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+    }
+    
+    .upgrade-name {
+        font-size: 1em;
+    }
+    
+    .upgrade-level {
+        font-size: 0.8em;
+        padding: 2px 7px;
+    }
+    
+    .upgrade-desc {
+        font-size: 0.85em;
+        margin-bottom: 5px;
+    }
+    
+    .upgrade-stats {
+        font-size: 0.8em;
+    }
+    
+    /* Footer - compact */
     .footer {
-        flex-direction: column;
-        gap: 10px;
+        gap: 8px;
+        padding: 10px;
     }
     
     .btn {
-        width: 100%;
-        max-width: 250px;
-    }
-}
-/* ===== ROTATING UPGRADE CIRCLES ===== */
-.cookie-container {
-    position: relative;
-    width: 200px;
-    height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* ROTATION CONTAINERS - Each layer rotates independently */
-.rotation-layer {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform-origin: center;
-}
-
-/* LAYER 1: Cursor (Fingers) - Rotates clockwise */
-.layer-1 {
-    animation: rotate-clockwise 20s linear infinite;
-}
-
-/* LAYER 2: Grandma - Rotates counter-clockwise */
-.layer-2 {
-    animation: rotate-counter 25s linear infinite;
-}
-
-/* LAYER 3: Farm - Rotates clockwise */
-.layer-3 {
-    animation: rotate-clockwise 30s linear infinite;
-}
-
-/* LAYER 4: Mine - Rotates counter-clockwise */
-.layer-4 {
-    animation: rotate-counter 35s linear infinite;
-}
-
-/* LAYER 5: Factory - Rotates clockwise */
-.layer-5 {
-    animation: rotate-clockwise 40s linear infinite;
-}
-
-/* LAYER 6: Bank - Rotates counter-clockwise */
-.layer-6 {
-    animation: rotate-counter 45s linear infinite;
-}
-
-/* LAYER 7: Temple - Rotates clockwise */
-.layer-7 {
-    animation: rotate-clockwise 50s linear infinite;
-}
-
-/* LAYER 8: Wizard - Rotates counter-clockwise */
-.layer-8 {
-    animation: rotate-counter 55s linear infinite;
-}
-
-@keyframes rotate-clockwise {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-@keyframes rotate-counter {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(-360deg); }
-}
-
-/* INDICATOR STYLES */
-.upgrade-indicator {
-    position: absolute;
-    font-size: 1.8rem;
-    opacity: 1;
-    z-index: 5;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s ease;
-}
-
-/* Position indicators on different radii based on layer */
-.layer-1 .upgrade-indicator { font-size: 1.6rem; }
-.layer-2 .upgrade-indicator { font-size: 1.7rem; }
-.layer-3 .upgrade-indicator { font-size: 1.8rem; }
-.layer-4 .upgrade-indicator { font-size: 1.9rem; }
-.layer-5 .upgrade-indicator { font-size: 2rem; }
-.layer-6 .upgrade-indicator { font-size: 2.1rem; }
-.layer-7 .upgrade-indicator { font-size: 2.2rem; }
-.layer-8 .upgrade-indicator { font-size: 2.3rem; }
-
-/* Hover effect on cookie area shows all indicators */
-.cookie-area:hover .upgrade-indicator {
-    transform: scale(1.2);
-    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-}
-
-/* Colors for each layer */
-.layer-1 .upgrade-indicator { color: #4CAF50; }    /* Green fingers */
-.layer-2 .upgrade-indicator { color: #FF5722; }    /* Orange grandmas */
-.layer-3 .upgrade-indicator { color: #8BC34A; }    /* Light green farms */
-.layer-4 .upgrade-indicator { color: #9E9E9E; }    /* Grey mines */
-.layer-5 .upgrade-indicator { color: #3F51B5; }    /* Blue factories */
-.layer-6 .upgrade-indicator { color: #FF9800; }    /* Orange banks */
-.layer-7 .upgrade-indicator { color: #9C27B0; }    /* Purple temples */
-.layer-8 .upgrade-indicator { color: #3F51B5; }    /* Blue wizards */
-
-/* Toggle Number Format Button */
-.btn-toggle {
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffd700;
-    border: none;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    font-size: 1.1em;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-}
-
-.btn-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
-}
-
-.btn-toggle.flat {
-    color: #7fff00;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .main-game {
-        flex-direction: column;
+        min-width: 90px;
+        padding: 8px 12px;
+        font-size: 0.85em;
     }
     
-    .cookie-area, .upgrades-panel {
-        min-width: 100%;
-        height: auto;
+    #save-status {
+        min-width: 100px;
+        font-size: 0.85em;
+    }
+    
+    /* Cookie container - smaller */
+    .cookie-container {
+        width: 160px;
+        height: 160px;
+    }
+    
+    /* Rotation layers - scale down */
+    .upgrade-indicator {
+        font-size: 1.3rem !important;
+    }
+    
+    .layer-1 .upgrade-indicator { font-size: 1.2rem !important; }
+    .layer-2 .upgrade-indicator { font-size: 1.3rem !important; }
+    .layer-3 .upgrade-indicator { font-size: 1.4rem !important; }
+    .layer-4 .upgrade-indicator { font-size: 1.5rem !important; }
+    .layer-5 .upgrade-indicator { font-size: 1.6rem !important; }
+    .layer-6 .upgrade-indicator { font-size: 1.7rem !important; }
+    .layer-7 .upgrade-indicator { font-size: 1.8rem !important; }
+    .layer-8 .upgrade-indicator { font-size: 1.9rem !important; }
+}
+
+/* Extra small screens (iPhone SE, etc.) */
+@media (max-width: 420px) {
+    .btn-prestige {
+        min-width: 95px;
+        padding: 7px 10px;
+        font-size: 0.8em;
     }
     
     .cookie-area {
-        padding: 25px 15px;
-        height: 280px;
+        height: 200px;
     }
     
     .cookie i {
-        font-size: 5rem;
+        font-size: 3.5rem;
     }
     
-    .header {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .stats {
-        width: 100%;
-        justify-content: space-around;
-    }
-    
-    .footer {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .btn {
-        width: 100%;
-        max-width: 250px;
-    }
-    
-    /* ===== CRITICAL: Fix mobile scrolling ===== */
-    body {
-        height: auto;
-        min-height: 100vh;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
-    }
-    
-    .game-container {
-        max-height: none; /* Remove height restriction */
-        min-height: 100vh;
-        overflow-y: visible; /* Allow content to expand */
-        padding-bottom: 30px; /* Extra space at bottom */
+    .cookie-container {
+        width: 140px;
+        height: 140px;
     }
     
     .upgrades-panel {
-        max-height: 300px; /* Slightly smaller on mobile */
+        max-height: 250px;
+    }
+    
+    .upgrade-item {
+        padding: 8px;
+    }
+    
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .header-buttons {
+        width: 100%;
+        justify-content: center;
     }
 }
-.btn-toggle {
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffd700;
-    border: none;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    font-size: 1.1em;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.btn-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
-}
-
-.btn-toggle.flat {
-    color: #7fff00;
+/* iOS Safari specific fixes */
+@supports (-webkit-overflow-scrolling: touch) {
+    .game-container {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .upgrades-panel {
+        -webkit-overflow-scrolling: touch;
+    }
 }
